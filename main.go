@@ -50,4 +50,26 @@ func main(){
 	)
 	failOnError(err, "Failed to publish a message")
 	log.Printf(" [x] Sent %s", body)
+
+	msgs,err := ch.Consume(
+		q.Name,
+		"",
+		false,
+		false,
+		false,
+		false,
+		nil,
+	)
+	failOnError(err,"failed to register a consumer")
+
+	//var forever chan struct {}
+
+	go func ()  {
+		for d := range msgs {
+			log.Printf("Recieved messages %s :",d.Body)
+		}
+	}()
+
+	log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
+	
 }
